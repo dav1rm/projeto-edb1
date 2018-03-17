@@ -3,14 +3,14 @@
 using namespace std;
 int buscaSequencial( int *first, int *last, int value )
 {
-    //armazena o tamanho do array
+    //Armazena o tamanho do array
     int tamanho = last-first;
     //Percorre todo o array verificando cada elemento se é igual a value
     for (int i=0; i<tamanho; i++)
     {
+        //Se value foi encontrado no array, então retorna o indice
         if(first[i] == value)
         {
-            //Se value foi encontrado no array, então retorna o indice
             return i;
         }
     }
@@ -18,6 +18,44 @@ int buscaSequencial( int *first, int *last, int value )
     return -1;
 }
 
+int buscaBinaria( int *first, int *last, int value )
+{
+    //Armazena o tamanho do array
+    int tamanho = last-first;
+    //Armazena a metade do array
+    int metade = tamanho/2;
+    //Verifica se value está no meio do array
+    if (value == first[metade])
+    {
+        return metade;
+    }
+    //Verifica se value está na primeira metade do array
+    else if (value > first[metade])
+    {
+        for (int i=(metade+1); i<tamanho; i++)
+        {
+            //Se value foi encontrado no array, então retorna o indice
+            if(first[i] == value)
+            {
+                return i;
+            }
+        }
+    }
+    //Verifica se value está na segunda metade do array
+    else if (value < first[metade])
+    {
+        for (int i=0; i < metade; i++)
+        {
+            //Se value foi encontrado no array, então retorna o indice
+            if(first[i] == value)
+            {
+                return i;
+            }
+        }
+    }
+    //Se value não foi encontrado no array, então retorna -1
+    return -1;
+}
 int main( void )
 {
     int A[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
@@ -27,6 +65,6 @@ int main( void )
     cout << "]\n";
 
     //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaSequencial(begin(A), end(A), 23) << '\n';
+    cout << "Indice eh: " << buscaBinaria(begin(A), end(A), 13) << '\n';
     return 0;
 }
