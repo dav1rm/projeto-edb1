@@ -1,6 +1,31 @@
 #include <iostream>
 #include <iterator>
 using namespace std;
+
+int jumpSearch( int *first, int *last, int value, int num);
+
+int buscaTernaria( int *first, int *last, int value );
+
+int buscaBinariaRecursiva( int *first, int *last, int value );
+
+int buscaBinariaRecursiva( int *first, int *last, int value, int * _first );
+
+int buscaBinaria( int *first, int *last, int value );
+
+int buscaSequencial( int *first, int *last, int value );
+
+int main( void ) {
+    int A[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
+    //Imprime o array A
+    cout << ">>> Original array A: [ ";
+    copy( begin(A), end(A), ostream_iterator<int>( cout, " ") );
+    cout << "]\n";
+
+    //Imprime o indice do elemento encontrado
+    cout << "Indice eh: " << buscaBinariaRecursiva(begin(A), end(A), 45) << '\n';
+    return 0;
+}
+
 int buscaSequencial( int *first, int *last, int value ) {
     //Armazena o tamanho do array
     int size = last-first;
@@ -45,33 +70,28 @@ int buscaBinaria( int *first, int *last, int value ) {
 }
 
 int buscaBinariaRecursiva( int *first, int *last, int value ) {
-    //Armazena o tamanho do array
-    int size = last-first;
-    //Armazena a metade do array
-    int m = size/2;
-    //Verifica se value está no meio do array
-    if (value == first[m]) {
-        return m;
-    //Verifica se value está na primeira metade do array
-    } else if (value > first[m]) {
-        // return buscaBinariaRecursiva(m+1, size, value);
-        for (int i=(m+1); i<size; i++) {
-            //Se value foi encontrado no array, então retorna o indice
-            if(first[i] == value) {
-                return i;
-            }
+    return buscaBinariaRecursiva( first, last, value, first );
+}
+
+int buscaBinariaRecursiva( int *first, int *last, int value, int * firstP ) {
+    //Armazena o elemento central
+    int * center = first+((last-first)/2);
+    //Verifica se o array nao chegou ao fim
+    if (first < last) {
+        //Verifica se value está no meio do array
+        if (value == *center) {
+            return center-firstP;
+        //Verifica se value está no final do array
+        } else if (value > *center) {
+            buscaBinariaRecursiva(center+1, last, value, firstP);
+        //Verifica se value está no inicio do array
+        } else if (value < *center) {
+            buscaBinariaRecursiva(first, center-1, value, firstP);
+        //Se value não foi encontrado no array, então retorna -1
         }
-    //Verifica se value está na segunda metade do array
-    } else if (value < first[m]) {
-        for (int i=0; i < m; i++) {
-            //Se value foi encontrado no array, então retorna o indice
-            if(first[i] == value) {
-                return i;
-            }
-        }
+    }else{
+        return -1;
     }
-    //Se value não foi encontrado no array, então retorna -1
-    return -1;
 }
 
 int buscaTernaria( int *first, int *last, int value ) {
@@ -155,16 +175,4 @@ int jumpSearch( int *first, int *last, int value, int num) {
     }
     //Se value não foi encontrado no array, então retorna -1
     return -1;
-}
-
-int main( void ) {
-    int A[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
-    //Imprime o array A
-    cout << ">>> Original array A: [ ";
-    copy( begin(A), end(A), ostream_iterator<int>( cout, " ") );
-    cout << "]\n";
-
-    //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaSalto(begin(A), end(A), 23, 2) << '\n';
-    return 0;
 }
