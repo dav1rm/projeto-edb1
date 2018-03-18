@@ -49,26 +49,41 @@ int buscaBinariaRecursiva( int *first, int *last, int value ) {
     int size = last-first;
     //Armazena a metade do array
     int m = size/2;
+    int *work = first;
+    while (work < last){
+        if (*work == value)
+        {
+            return work;
+        }
+        work++;
+    }
+    cout << "primeiro elemento=" << *first << " e segundo elemento=" << first[m] << endl;
     //Verifica se value está no meio do array
     if (value == first[m]) {
+        cout << value << " == " << first[m] << "???" << endl;
         return m;
     //Verifica se value está na primeira metade do array
     } else if (value > first[m]) {
-        // return buscaBinariaRecursiva(m+1, size, value);
-        for (int i=(m+1); i<size; i++) {
-            //Se value foi encontrado no array, então retorna o indice
-            if(first[i] == value) {
-                return i;
-            }
-        }
+        cout << " foi para segunda metade " << endl;
+        //cout << "first= " << first+(m+1) << " last= " << last << endl;
+        return buscaBinariaRecursiva(first+(m+1), last, value);
+        // for (int i=(m+1); i<size; i++) {
+        //     //Se value foi encontrado no array, então retorna o indice
+        //     if(first[i] == value) {
+        //         return i;
+        //     }
+        // }
     //Verifica se value está na segunda metade do array
     } else if (value < first[m]) {
-        for (int i=0; i < m; i++) {
-            //Se value foi encontrado no array, então retorna o indice
-            if(first[i] == value) {
-                return i;
-            }
-        }
+        cout << " foi para primeira metade " << endl;
+      // cout << "first= " << first+(m-1) << " last= " << first+(m-1) << endl;
+      return buscaBinariaRecursiva(first, first+(m-1), value);
+        // for (int i=0; i < m; i++) {
+        //     //Se value foi encontrado no array, então retorna o indice
+        //     if(first[i] == value) {
+        //         return i;
+        //     }
+        // }
     }
     //Se value não foi encontrado no array, então retorna -1
     return -1;
@@ -165,6 +180,6 @@ int main( void ) {
     cout << "]\n";
 
     //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaSalto(begin(A), end(A), 23, 2) << '\n';
+    cout << "Indice eh: " << buscaBinariaRecursiva(begin(A), end(A), 23) << '\n';
     return 0;
 }
