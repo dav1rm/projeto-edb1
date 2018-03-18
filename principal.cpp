@@ -44,6 +44,36 @@ int buscaBinaria( int *first, int *last, int value ) {
     return -1;
 }
 
+int buscaBinariaRecursiva( int *first, int *last, int value ) {
+    //Armazena o tamanho do array
+    int size = last-first;
+    //Armazena a metade do array
+    int m = size/2;
+    //Verifica se value está no meio do array
+    if (value == first[m]) {
+        return m;
+    //Verifica se value está na primeira metade do array
+    } else if (value > first[m]) {
+        // return buscaBinariaRecursiva(m+1, size, value);
+        for (int i=(m+1); i<size; i++) {
+            //Se value foi encontrado no array, então retorna o indice
+            if(first[i] == value) {
+                return i;
+            }
+        }
+    //Verifica se value está na segunda metade do array
+    } else if (value < first[m]) {
+        for (int i=0; i < m; i++) {
+            //Se value foi encontrado no array, então retorna o indice
+            if(first[i] == value) {
+                return i;
+            }
+        }
+    }
+    //Se value não foi encontrado no array, então retorna -1
+    return -1;
+}
+
 int buscaTernaria( int *first, int *last, int value ) {
     //Armazena o tamanho do array
     int size = last-first;
