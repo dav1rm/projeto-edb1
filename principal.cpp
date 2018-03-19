@@ -4,13 +4,17 @@ using namespace std;
 
 int jumpSearch( int *first, int *last, int value, int num);
 
-int buscaTernaria( int *first, int *last, int value );
+int buscaBinaria( int *first, int *last, int value );
 
 int buscaBinariaRecursiva( int *first, int *last, int value );
 
 int buscaBinariaRecursiva( int *first, int *last, int value, int * _first );
 
-int buscaBinaria( int *first, int *last, int value );
+int buscaTernaria( int *first, int *last, int value );
+
+int buscaTernariaRecursiva( int *first, int *last, int value );
+
+int buscaTernariaRecursiva( int *first, int *last, int value, int * firstP );
 
 int buscaSequencial( int *first, int *last, int value );
 
@@ -22,7 +26,7 @@ int main( void ) {
     cout << "]\n";
 
     //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaBinariaRecursiva(begin(A), end(A), 45) << '\n';
+    cout << "Indice eh: " << buscaTernariaRecursiva(begin(A), end(A), 1) << '\n';
     return 0;
 }
 
@@ -134,6 +138,40 @@ int buscaTernaria( int *first, int *last, int value ) {
     }
     //Se value não foi encontrado no array, então retorna -1
     return -1;
+}
+
+int buscaTernariaRecursiva( int *first, int *last, int value ) {
+    return buscaTernariaRecursiva(first, last, value, first);
+}
+
+int buscaTernariaRecursiva( int *first, int *last, int value, int * firstP ) {
+    //Armazena o tamanho dos subvetores
+    int part = (last-first)/3;
+    //Armazena o primeiro limite do array
+    int * t1 = first+part;
+    //Armazena o segundo limite do array
+    int * t2 = first+(part*2);
+    //Verifica se o array nao chegou ao fim
+    if (first > last) {
+        //Se value não foi encontrado no array, então retorna -1
+        return -1;
+    }
+    //Verifica se value está no primeiro limite do array
+    if (value == *t1) {
+        return t1-firstP;
+    //Verifica se value está no segundo limite do array
+    } else if (value == *t2) {
+        return t2-firstP;
+    //Verifica se value está no primeiro subvetor
+    } else if (value < *t1) {
+        buscaTernariaRecursiva(first, t1-1, value, firstP);
+    //Verifica se value está no segundo subvetor
+    } else if (value > *t1 && value < *t2) {
+        buscaTernariaRecursiva(t1+1, t2-1, value, firstP);
+    //Verifica se value está no terceiro subvetor
+    } else {
+        buscaTernariaRecursiva(t2+1, last, value, firstP);
+    }
 }
 
 int jumpSearch( int *first, int *last, int value, int num) {
