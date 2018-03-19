@@ -1,8 +1,9 @@
 #include <iostream>
 #include <iterator>
+#include <cmath>
 using namespace std;
 
-int jumpSearch( int *first, int *last, int value, int num);
+int jumpSearch( int *first, int *last, int value);
 
 int buscaBinaria( int *first, int *last, int value );
 
@@ -26,7 +27,7 @@ int main( void ) {
     cout << "]\n";
 
     //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaTernariaRecursiva(begin(A), end(A), 1) << '\n';
+    cout << "Indice eh: " << jumpSearch(begin(A), end(A), 17) << '\n';
     return 0;
 }
 
@@ -174,9 +175,11 @@ int buscaTernariaRecursiva( int *first, int *last, int value, int * firstP ) {
     }
 }
 
-int jumpSearch( int *first, int *last, int value, int num) {
+int jumpSearch( int *first, int *last, int value) {
     //Armazena o tamanho do array
     int size = last-first;
+    //Armazena o tamanho das partes do array
+    int num = sqrt(size);
     //Armazena o numero de partes do array
     int part = size/num;
     //Armazena os limites de cada subvetor do array
