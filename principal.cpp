@@ -1,37 +1,40 @@
 #include <iostream>
 #include <iterator>
 #include <cmath>
+#include <vector>
+
 using namespace std;
 
-int jumpSearch( int *first, int *last, int value);
+int jumpSearch( int *first, int *last, long int value);
 
-int buscaBinaria( int *first, int *last, int value );
+int buscaBinaria( long int *first, long int *last, long int value );
 
-int buscaBinariaRecursiva( int *first, int *last, int value );
+int buscaBinariaRecursiva( long int *first, long int *last, long int value );
 
-int buscaBinariaRecursiva( int *first, int *last, int value, int * _first );
+int buscaBinariaRecursiva( long int *first, long int *last, long int value, long int * firstP );
 
-int buscaTernaria( int *first, int *last, int value );
+int buscaTernaria( int *first, int *last, long int value );
 
-int buscaTernariaRecursiva( int *first, int *last, int value );
+int buscaTernariaRecursiva( int *first, int *last, long int value );
 
-int buscaTernariaRecursiva( int *first, int *last, int value, int * firstP );
+int buscaTernariaRecursiva( int *first, int *last, long int value, int * firstP );
 
-int buscaSequencial( int *first, int *last, int value );
+int buscaSequencial( long int *first, long int *last, long int value );
 
 int main( void ) {
-    int A[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24 };
-    //Imprime o array A
-    cout << ">>> Original array A: [ ";
-    copy( begin(A), end(A), ostream_iterator<int>( cout, " ") );
-    cout << "]\n";
-
-    //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << jumpSearch(begin(A), end(A), 17) << '\n';
-    return 0;
+    vector<long int> vet (230000000);
+    // long int vet[230000000];
+    //cout << "tamanho suportado: " << vet.max_size() << endl;
+    for (long int i = 0; i < 230000000; i++)
+    {
+        vet[i] = i+1;
+    }
+    // //Imprime o indice do elemento encontrado
+    cout << "Indice eh: " << buscaBinariaRecursiva(&vet[0], &vet[230000000], 230000001) << '\n';
+    // return 0;
 }
 
-int buscaSequencial( int *first, int *last, int value ) {
+int buscaSequencial( long int *first, long int *last, long int value ) {
     //Armazena o tamanho do array
     int size = last-first;
     //Percorre todo o array verificando cada elemento se é igual a value
@@ -45,7 +48,7 @@ int buscaSequencial( int *first, int *last, int value ) {
     return -1;
 }
 
-int buscaBinaria( int *first, int *last, int value ) {
+int buscaBinaria( long int *first, long int *last, long int value ) {
     //Armazena o tamanho do array
     int size = last-first;
     //Armazena a metade do array
@@ -74,38 +77,39 @@ int buscaBinaria( int *first, int *last, int value ) {
     return -1;
 }
 
-int buscaBinariaRecursiva( int *first, int *last, int value ) {
+int buscaBinariaRecursiva( long int *first, long int *last, long int value ) {
     return buscaBinariaRecursiva( first, last, value, first );
 }
 
-int buscaBinariaRecursiva( int *first, int *last, int value, int * firstP ) {
+int buscaBinariaRecursiva( long int *first, long int *last, long int value, long int * firstP ) {
     //Armazena o elemento central
-    int * center = first+((last-first)/2);
-    //Verifica se o array nao chegou ao fim
-    if (first < last) {
-        //Verifica se value está no meio do array
-        if (value == *center) {
-            return center-firstP;
-        //Verifica se value está no final do array
-        } else if (value > *center) {
-            buscaBinariaRecursiva(center+1, last, value, firstP);
-        //Verifica se value está no inicio do array
-        } else if (value < *center) {
-            buscaBinariaRecursiva(first, center-1, value, firstP);
+    long int * center = first+((last-first)/2);
+
+    //Verifica se o array chegou ao fim
+    if (first > last) {
         //Se value não foi encontrado no array, então retorna -1
-        }
-    }else{
         return -1;
+    }
+    //Verifica se value está no meio do array
+    if (value == *center) {
+        return center-firstP;
+    //Verifica se value está no final do array
+    } else if (value > *center) {
+        buscaBinariaRecursiva(center+1, last, value, firstP);
+    //Verifica se value está no inicio do array
+    } else if (value < *center) {
+        buscaBinariaRecursiva(first, center-1, value, firstP);
+    //Se value não foi encontrado no array, então retorna -1
     }
 }
 
-int buscaTernaria( int *first, int *last, int value ) {
+int buscaTernaria( int *first, int *last, long int value ) {
     //Armazena o tamanho do array
-    int size = last-first;
+    long int size = last-first;
     //Armazena o primeiro limite do array
-    int t1 = size/3;
+    long int t1 = size/3;
     //Armazena o segundo limite do array
-    int t2 = t1*2;
+    long int t2 = t1*2;
     //Verifica se value está no primeiro limite do array
     if (value == first[t1]) {
         return t1;
@@ -114,7 +118,7 @@ int buscaTernaria( int *first, int *last, int value ) {
         return t2;
     //Verifica se value está na primeira metade do array
     } else if (value < first[t1]) {
-        for (int i=0; i<t1; i++) {
+        for (long int i=0; i<t1; i++) {
             //Se value foi encontrado no array, então retorna o indice
             if(first[i] == value) {
                 return i;
@@ -122,7 +126,7 @@ int buscaTernaria( int *first, int *last, int value ) {
         }
         //Verifica se value está na segunda metade do array
     } else if (value > first[t1] && value < first[t2]) {
-        for (int i=t1; i < t2; i++) {
+        for (long int i=t1; i < t2; i++) {
             //Se value foi encontrado no array, então retorna o indice
             if(first[i] == value) {
                 return i;
@@ -130,7 +134,7 @@ int buscaTernaria( int *first, int *last, int value ) {
         }
     //Verifica se value está na terceira metade do array
     } else {
-        for (int i=t2; i < size; i++) {
+        for (long int i=t2; i < size; i++) {
             //Se value foi encontrado no array, então retorna o indice
             if(first[i] == value) {
                 return i;
@@ -141,18 +145,18 @@ int buscaTernaria( int *first, int *last, int value ) {
     return -1;
 }
 
-int buscaTernariaRecursiva( int *first, int *last, int value ) {
+int buscaTernariaRecursiva( int *first, int *last, long int value ) {
     return buscaTernariaRecursiva(first, last, value, first);
 }
 
-int buscaTernariaRecursiva( int *first, int *last, int value, int * firstP ) {
+int buscaTernariaRecursiva( int *first, int *last, long int value, int * firstP ) {
     //Armazena o tamanho dos subvetores
     int part = (last-first)/3;
     //Armazena o primeiro limite do array
     int * t1 = first+part;
     //Armazena o segundo limite do array
     int * t2 = first+(part*2);
-    //Verifica se o array nao chegou ao fim
+    //Verifica se o array chegou ao fim
     if (first > last) {
         //Se value não foi encontrado no array, então retorna -1
         return -1;
@@ -175,7 +179,7 @@ int buscaTernariaRecursiva( int *first, int *last, int value, int * firstP ) {
     }
 }
 
-int jumpSearch( int *first, int *last, int value) {
+int jumpSearch( int *first, int *last, long int value) {
     //Armazena o tamanho do array
     int size = last-first;
     //Armazena o tamanho das partes do array
