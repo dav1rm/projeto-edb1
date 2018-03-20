@@ -5,40 +5,42 @@
 
 using namespace std;
 
-int jumpSearch( int *first, int *last, long int value);
+long int jumpSearch( long int *first, long int *last, long int value);
 
-int buscaBinaria( long int *first, long int *last, long int value );
+long int buscaBinaria( long int *first, long int *last, long int value );
 
-int buscaBinariaRecursiva( long int *first, long int *last, long int value );
+long int buscaBinariaRecursiva( long int *first, long int *last, long int value );
 
-int buscaBinariaRecursiva( long int *first, long int *last, long int value, long int * firstP );
+long int buscaBinariaRecursiva( long int *first, long int *last, long int value, long int * firstP );
 
-int buscaTernaria( int *first, int *last, long int value );
+long int buscaTernaria( long int *first, long int *last, long int value );
 
-int buscaTernariaRecursiva( int *first, int *last, long int value );
+long int buscaTernariaRecursiva( long int *first, long int *last, long int value );
 
-int buscaTernariaRecursiva( int *first, int *last, long int value, int * firstP );
+long int buscaTernariaRecursiva( long int *first, long int *last, long int value, long int * firstP );
 
-int buscaSequencial( long int *first, long int *last, long int value );
+long int buscaSequencial( long int *first, long int *last, long int value );
 
 int main( void ) {
-    vector<long int> vet (230000000);
-    // long int vet[230000000];
+
+    long int n = 100000000;
+    vector<long int> vet(n);
+    //long int vet[1000000000];
     //cout << "tamanho suportado: " << vet.max_size() << endl;
-    for (long int i = 0; i < 230000000; i++)
+    for (long int i = 0; i < n; i++)
     {
         vet[i] = i+1;
     }
     // //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaBinariaRecursiva(&vet[0], &vet[230000000], 230000001) << '\n';
-    // return 0;
+    cout << "Indice eh: " << buscaTernariaRecursiva(&vet[0], &vet[n], n) << '\n';
+    return 0;
 }
 
-int buscaSequencial( long int *first, long int *last, long int value ) {
+long int buscaSequencial( long int *first, long int *last, long int value ) {
     //Armazena o tamanho do array
-    int size = last-first;
+    long int size = last-first;
     //Percorre todo o array verificando cada elemento se é igual a value
-    for (int i=0; i<size; i++) {
+    for (long int i=0; i<size; i++) {
         //Se value foi encontrado no array, então retorna o indice
         if(first[i] == value) {
             return i;
@@ -48,17 +50,17 @@ int buscaSequencial( long int *first, long int *last, long int value ) {
     return -1;
 }
 
-int buscaBinaria( long int *first, long int *last, long int value ) {
+long int buscaBinaria( long int *first, long int *last, long int value ) {
     //Armazena o tamanho do array
-    int size = last-first;
+    long int size = last-first;
     //Armazena a metade do array
-    int m = size/2;
+    long int m = size/2;
     //Verifica se value está no meio do array
     if (value == first[m]) {
         return m;
     //Verifica se value está na primeira metade do array
     } else if (value > first[m]) {
-        for (int i=(m+1); i<size; i++) {
+        for (long int i=(m+1); i<size; i++) {
             //Se value foi encontrado no array, então retorna o indice
             if(first[i] == value) {
                 return i;
@@ -66,7 +68,7 @@ int buscaBinaria( long int *first, long int *last, long int value ) {
         }
     //Verifica se value está na segunda metade do array
     } else if (value < first[m]) {
-        for (int i=0; i < m; i++) {
+        for (long int i=0; i < m; i++) {
             //Se value foi encontrado no array, então retorna o indice
             if(first[i] == value) {
                 return i;
@@ -77,11 +79,11 @@ int buscaBinaria( long int *first, long int *last, long int value ) {
     return -1;
 }
 
-int buscaBinariaRecursiva( long int *first, long int *last, long int value ) {
+long int buscaBinariaRecursiva( long int *first, long int *last, long int value ) {
     return buscaBinariaRecursiva( first, last, value, first );
 }
 
-int buscaBinariaRecursiva( long int *first, long int *last, long int value, long int * firstP ) {
+long int buscaBinariaRecursiva( long int *first, long int *last, long int value, long int * firstP ) {
     //Armazena o elemento central
     long int * center = first+((last-first)/2);
 
@@ -103,7 +105,7 @@ int buscaBinariaRecursiva( long int *first, long int *last, long int value, long
     }
 }
 
-int buscaTernaria( int *first, int *last, long int value ) {
+long int buscaTernaria( long int *first, long int *last, long int value ) {
     //Armazena o tamanho do array
     long int size = last-first;
     //Armazena o primeiro limite do array
@@ -145,17 +147,17 @@ int buscaTernaria( int *first, int *last, long int value ) {
     return -1;
 }
 
-int buscaTernariaRecursiva( int *first, int *last, long int value ) {
+long int buscaTernariaRecursiva( long int *first, long int *last, long int value ) {
     return buscaTernariaRecursiva(first, last, value, first);
 }
 
-int buscaTernariaRecursiva( int *first, int *last, long int value, int * firstP ) {
+long int buscaTernariaRecursiva( long int *first, long int *last, long int value, long int * firstP ) {
     //Armazena o tamanho dos subvetores
-    int part = (last-first)/3;
+    long int part = (last-first)/3;
     //Armazena o primeiro limite do array
-    int * t1 = first+part;
+    long int * t1 = first+part;
     //Armazena o segundo limite do array
-    int * t2 = first+(part*2);
+    long int * t2 = first+(part*2);
     //Verifica se o array chegou ao fim
     if (first > last) {
         //Se value não foi encontrado no array, então retorna -1
@@ -179,28 +181,28 @@ int buscaTernariaRecursiva( int *first, int *last, long int value, int * firstP 
     }
 }
 
-int jumpSearch( int *first, int *last, long int value) {
+long int jumpSearch( long int *first, long int *last, long int value) {
     //Armazena o tamanho do array
-    int size = last-first;
+    long int size = last-first;
     //Armazena o tamanho das partes do array
-    int num = sqrt(size);
+    long int num = sqrt(size);
     //Armazena o numero de partes do array
-    int part = size/num;
+    long int part = size/num;
     //Armazena os limites de cada subvetor do array
-    int t[num-1];
+    long int t[num-1];
     for (int i = 0; i < (num-1); i++) {
         t[i] = part*(i+1);
     }
-    int l = 0;
+    long int l = 0;
     //Percorrendo os limites do array
-    for (int i = 0; i < (num-1); i++) {
+    for (long int i = 0; i < (num-1); i++) {
         //Verifica se value está em algum dos limites do array
         if (value == first[t[i]]) {
             //Se value foi encontrado no array, então retorna o indice
             return t[i];
         //Verifica se value está em um subvetor do array
         } else if (value < first[t[i]]) {
-            for (int j=l; j<t[i]; j++) {
+            for (long int j=l; j<t[i]; j++) {
                 //Se value foi encontrado no array, então retorna o indice
                 if (first[j] == value) {
                     return j;
@@ -208,7 +210,7 @@ int jumpSearch( int *first, int *last, long int value) {
             }
         //Verifica se value está no ultimo subvetor do array
         } else if (t[i] == t[num-2]) {
-            for (int j=l; j<size; j++) {
+            for (long int j=l; j<size; j++) {
                 //Se value foi encontrado no array, então retorna o indice
                 if (first[j] == value) {
                     return j;
