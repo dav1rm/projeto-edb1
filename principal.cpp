@@ -2,6 +2,7 @@
 #include <iterator>
 #include <cmath>
 #include <vector>
+#include <chrono>
 
 using namespace std;
 
@@ -22,17 +23,46 @@ long int buscaTernariaRecursiva( long int *first, long int *last, long int value
 long int buscaSequencial( long int *first, long int *last, long int value );
 
 int main( void ) {
+    long int n = 1000, L = 100000000, indiceJS, indiceBB, indiceBR, indiceBT, indiceBS, indice;
+    double mJS, mBB, mBR, mBT, mBS, media, diferenca, inicio, fim;
 
-    long int n = 100000000;
-    vector<long int> vet(n);
-    //long int vet[1000000000];
-    //cout << "tamanho suportado: " << vet.max_size() << endl;
-    for (long int i = 0; i < n; i++)
+    vector<long int> vet(L);
+
+    //Preenchendoo vetor com elementos ordenados
+    for (long int i = 0; i < L; i++)
     {
         vet[i] = i+1;
     }
-    // //Imprime o indice do elemento encontrado
-    cout << "Indice eh: " << buscaTernariaRecursiva(&vet[0], &vet[n], n) << '\n';
+
+    //Executando 50 amostras iniciando de 1000 até 100000000 com incremento de 1999980
+    while (n <= L) {
+        //Cada função de busca é testada 100 vezes para obter um tempo médio de execução
+        for(auto i = 0; i < 100; i++){
+
+                //std::cout << ">>> STARTING computation that needs timing <<<\n";
+                auto inicio = std::chrono::steady_clock::now();
+                //================================================================================
+                //std::cout << ">>> Testando busca sequencial...\n";
+                //Imprime o indice do elemento encontrado
+                indice = buscaSequencial(&vet[0], &vet[n], L);
+
+                //================================================================================
+                auto fim = std::chrono::steady_clock::now();
+                //std::cout << ">>> ENDING computation that needs timing <<<\n";
+
+                //Store the time difference between start and end
+                auto diferenca = fim - inicio;
+
+                // Milliseconds (10^-3)
+                media = media + ((std::chrono::duration <double, std::milli> (diferenca).count() - media)/i);
+                cout << "media: " << media << endl;
+        }
+        std::cout.precision(4);
+		std::cout << n << " " << media << "\n";
+        //cout << "media foi: " << media << endl;
+        //Incremento calculado com base no intervalo das amostras
+        n = n + 3999960;
+    }
     return 0;
 }
 
