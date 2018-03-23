@@ -22,8 +22,10 @@ long int buscaTernariaRecursiva( long int *first, long int *last, long int value
 
 long int buscaSequencial( long int *first, long int *last, long int value );
 
+long int buscaFibonacci( long int *first, long int *last, long int value);
+
 int main( void ) {
-    long int n = 1000, L = 100000000, indiceJS, indiceBB, indiceBR, indiceBT, indiceBS, indice;
+    long int n = 1000, L = 14, indiceJS, indiceBB, indiceBR, indiceBT, indiceBS, indice;
     double mJS, mBB, mBR, mBT, mBS, media, diferenca, inicio, fim;
 
     vector<long int> vet(L);
@@ -33,36 +35,37 @@ int main( void ) {
     {
         vet[i] = i+1;
     }
-
-    //Executando 50 amostras iniciando de 1000 até 100000000 com incremento de 1999980
-    while (n <= L) {
-        //Cada função de busca é testada 100 vezes para obter um tempo médio de execução
-        for(auto i = 0; i < 100; i++){
-
-                //std::cout << ">>> STARTING computation that needs timing <<<\n";
-                auto inicio = std::chrono::steady_clock::now();
-                //================================================================================
-                //std::cout << ">>> Testando busca sequencial...\n";
-                //Imprime o indice do elemento encontrado
-                indice = buscaSequencial(&vet[0], &vet[n], L);
-
-                //================================================================================
-                auto fim = std::chrono::steady_clock::now();
-                //std::cout << ">>> ENDING computation that needs timing <<<\n";
-
-                //Store the time difference between start and end
-                auto diferenca = fim - inicio;
-
-                // Milliseconds (10^-3)
-                media = media + ((std::chrono::duration <double, std::milli> (diferenca).count() - media)/i);
-                cout << "media: " << media << endl;
-        }
-        std::cout.precision(4);
-		std::cout << n << " " << media << "\n";
-        //cout << "media foi: " << media << endl;
-        //Incremento calculado com base no intervalo das amostras
-        n = n + 3999960;
-    }
+    indice = buscaFibonacci(&vet[0], &vet[L], 1);
+    // //Executando 50 amostras iniciando de 1000 até 100000000 com incremento de 1999980
+    // while (n <= L) {
+    //     //Cada função de busca é testada 100 vezes para obter um tempo médio de execução
+    //     for(auto i = 0; i < 100; i++){
+    //
+    //             //std::cout << ">>> STARTING computation that needs timing <<<\n";
+    //             auto inicio = std::chrono::steady_clock::now();
+    //             //================================================================================
+    //             //std::cout << ">>> Testando busca sequencial...\n";
+    //             //Imprime o indice do elemento encontrado
+    //             indice = buscaSequencial(&vet[0], &vet[n], L);
+    //
+    //             //================================================================================
+    //             auto fim = std::chrono::steady_clock::now();
+    //             //std::cout << ">>> ENDING computation that needs timing <<<\n";
+    //
+    //             //Store the time difference between start and end
+    //             auto diferenca = fim - inicio;
+    //
+    //             // Milliseconds (10^-3)
+    //             media = media + (std::chrono::duration <double, std::milli> (diferenca).count() - media);
+    //             //cout << "media: " << media << endl;
+    //     }
+    //     std::cout.precision(4);
+	// 	//std::cout << n << " " << media << "\n";
+    //     //cout << "media foi: " << media << endl;
+    //     //Incremento calculado com base no intervalo das amostras
+    //     n = n + 3999960;
+    // }
+    cout << "indice é: " << indice << endl;
     return 0;
 }
 
@@ -255,23 +258,45 @@ long int jumpSearch( long int *first, long int *last, long int value) {
 }
 
 long int buscaFibonacci( long int *first, long int *last, long int value) {
-    //Array Fibonacci
-    int F[value];
-    //
-    for ( int i=0; i < value; i++ ) {
-		if ( i == 0 ) {
-            F[i] = 0;
-        } else if ( i == 1 ){
-            F[i] = 1;
-        } else {
-            F[i] = F[i-1] + F[i-2];
-        }
-	}
+    //Armazena o tamanho do array
+    int n = last-first;
+    //Armazena os três primeiros valores de Fibonacci
+    int fibMMm2 = 0;
+    int fibMMm1 = 1;
+    int fibM = fibMMm2 + fibMMm1;
+    //Armazena o tamanho do subvetor removido do inicio
+    int offset = -1;
 
-    for ( int i=0; i < value; i++ ) {
-        std::cout << F[i] << '\n';
+    //Armazena em fibM o número de Fibonacci menor ou igual ao tamanho do vetor
+    while (fibM < n) {
+        fibMMm2 = fibMMm1;
+        fibMMm1 = fibM;
+        fibM = fibMMm2 + fibMMm1;
     }
-
-    //Se value não foi encontrado no array, então retorna -1
+    //Se existir elementos entre fibM e 1, continua verificando
+    while (fibM > 1) {
+        // Verifica se fibMm2 é um local válido
+        int i = min(offset+fibMMm2, n-1);
+        //Se value for maior que first[i], então é eliminado o subarray de offset até i
+        if (first[i] < value) {
+            fibM = fibMMm1;
+            fibMMm1 = fibMMm2;
+            fibMMm2 = fibM - fibMMm1;
+            offset = i;
+        }
+        //Se value for menor que first[i], então é eliminado o subarray a partir de i+1
+        else if (first[i] > value) {
+            fibM  = fibMMm2;
+            fibMMm1 = fibMMm1 - fibMMm2;
+            fibMMm2 = fibM - fibMMm1;
+        }
+        //Se o elemento foi encontrado
+        else return i;
+    }
+    //Verifica se o último elemento é igual a value
+    if (fibMMm1 && first[offset+1] == value) {
+        return offset+1;
+    }
+    //Se o elemento não foi encontrado
     return -1;
 }
