@@ -35,7 +35,6 @@ int main( void ) {
         vet[i] = i+1;
     }
     std::cout << "#" << "   " << "mS"  <<  "  " << "mJS" << "   " << "mB" << "    " << "mBR" << "   " << "mT" << "    " << "mTR" << "   " << "mF" << "\n";
-    //Executando 50 amostras iniciando de 1000 até 100000000 com incremento de 1999980
     //Executando 200 amostras iniciando de 100 até 300000000 com incremento de 1499999.5
     while (n <= L) {
         //Cada função de busca é testada 100 vezes para obter um tempo médio de execução
