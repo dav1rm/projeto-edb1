@@ -25,7 +25,7 @@ long int buscaSequencial( long int *first, long int *last, long int value );
 long int buscaFibonacci( long int *first, long int *last, long int value);
 
 int main( void ) {
-    long int n = 1000, L = 100000000, indiceS, indiceJS, indiceB, indiceBR, indiceT, indiceTR, indiceF;
+    long int n = 100, L = 300000000, indiceS, indiceJS, indiceB, indiceBR, indiceT, indiceTR, indiceF;
     double mS = 0, mJS = 0, mB = 0, mBR = 0, mT = 0, mTR = 0, mF = 0;
 
     vector<long int> vet(L);
@@ -34,30 +34,31 @@ int main( void ) {
     for (long int i = 0; i < L; i++) {
         vet[i] = i+1;
     }
-    std::cout << "#" << "   " /*<< "mS"  <<  "  " << "mJS" << "   "*/ << "mB"/* << "    " << "mBR" << "   " << "mT" << "    " << "mTR" << "   " << "mF"*/ << "\n";
+    std::cout << "#" << "   " << "mS"  <<  "  " << "mJS" << "   " << "mB" << "    " << "mBR" << "   " << "mT" << "    " << "mTR" << "   " << "mF" << "\n";
     //Executando 50 amostras iniciando de 1000 até 100000000 com incremento de 1999980
+    //Executando 200 amostras iniciando de 100 até 300000000 com incremento de 1499999.5
     while (n <= L) {
         //Cada função de busca é testada 100 vezes para obter um tempo médio de execução
         for(auto i = 1; i <= 100; i++){
-            // //---------------------------------BUSCASEQUENCIAL--------------------------------------
-            // //Inicia a contagem de tempo para funcao;
-            // auto inicioS = std::chrono::steady_clock::now();
-            // //Salva o indice
-            // indiceS = buscaSequencial(&vet[0], &vet[n], L+1);
-            // //Finaliza a contagem de tempo para funcao;
-            // auto fimS = std::chrono::steady_clock::now();
-            // // Calcula a média progressiva em milliseconds (10^-3)
-            // mS += std::chrono::duration <double, std::milli> (fimS - inicioS).count();
-            //
-            // //----------------------------------BUSCAJUMPSEARCH-------------------------------------
-            // //Inicia a contagem de tempo para funcao;
-            // auto inicioJS = std::chrono::steady_clock::now();
-            // //Salva o indice
-            // indiceJS = jumpSearch(&vet[0], &vet[n], L+1);
-            // //Finaliza a contagem de tempo para funcao;
-            // auto fimJS = std::chrono::steady_clock::now();
-            // // Calcula a média progressiva em milliseconds (10^-3)
-            // mJS += std::chrono::duration <double, std::milli> (fimJS - inicioJS).count();
+            //---------------------------------BUSCASEQUENCIAL--------------------------------------
+            //Inicia a contagem de tempo para funcao;
+            auto inicioS = std::chrono::steady_clock::now();
+            //Salva o indice
+            indiceS = buscaSequencial(&vet[0], &vet[n], L+1);
+            //Finaliza a contagem de tempo para funcao;
+            auto fimS = std::chrono::steady_clock::now();
+            // Calcula a média progressiva em milliseconds (10^-3)
+            mS += std::chrono::duration <double, std::milli> (fimS - inicioS).count();
+
+            //----------------------------------BUSCAJUMPSEARCH-------------------------------------
+            //Inicia a contagem de tempo para funcao;
+            auto inicioJS = std::chrono::steady_clock::now();
+            //Salva o indice
+            indiceJS = jumpSearch(&vet[0], &vet[n], L+1);
+            //Finaliza a contagem de tempo para funcao;
+            auto fimJS = std::chrono::steady_clock::now();
+            // Calcula a média progressiva em milliseconds (10^-3)
+            mJS += std::chrono::duration <double, std::milli> (fimJS - inicioJS).count();
 
             //----------------------------------BUSCABINARIA-------------------------------------
             //Inicia a contagem de tempo para funcao;
@@ -68,52 +69,52 @@ int main( void ) {
             auto fimB = std::chrono::steady_clock::now();
             // Calcula a média progressiva em milliseconds (10^-3)
             mB += std::chrono::duration <double, std::milli> (fimB - inicioB).count();
+
+            //----------------------------------BUSCABINARIARECURSIVA-------------------------------------
+            //Inicia a contagem de tempo para funcao;
+            auto inicioBR = std::chrono::steady_clock::now();
+            //Salva o indice
+            indiceBR = buscaBinariaRecursiva(&vet[0], &vet[n], L+1);
+            //Finaliza a contagem de tempo para funcao;
+            auto fimBR = std::chrono::steady_clock::now();
+            // Calcula a média progressiva em milliseconds (10^-3)
+            mBR += std::chrono::duration <double, std::milli> (fimBR - inicioBR).count();
+
+            //----------------------------------BUSCATERNARIA-------------------------------------
+            //Inicia a contagem de tempo para funcao;
+            auto inicioT = std::chrono::steady_clock::now();
+            //Salva o indice
+            indiceT = buscaTernaria(&vet[0], &vet[n], L+1);
+            //Finaliza a contagem de tempo para funcao;
+            auto fimT = std::chrono::steady_clock::now();
+            // Calcula a média progressiva em milliseconds (10^-3)
+            mT += std::chrono::duration <double, std::milli> (fimT - inicioT).count();
             //
-            // //----------------------------------BUSCABINARIARECURSIVA-------------------------------------
-            // //Inicia a contagem de tempo para funcao;
-            // auto inicioBR = std::chrono::steady_clock::now();
-            // //Salva o indice
-            // indiceBR = buscaBinariaRecursiva(&vet[0], &vet[n], L+1);
-            // //Finaliza a contagem de tempo para funcao;
-            // auto fimBR = std::chrono::steady_clock::now();
-            // // Calcula a média progressiva em milliseconds (10^-3)
-            // mBR += std::chrono::duration <double, std::milli> (fimBR - inicioBR).count();
-            //
-            // //----------------------------------BUSCATERNARIA-------------------------------------
-            // //Inicia a contagem de tempo para funcao;
-            // auto inicioT = std::chrono::steady_clock::now();
-            // //Salva o indice
-            // indiceT = buscaTernaria(&vet[0], &vet[n], L+1);
-            // //Finaliza a contagem de tempo para funcao;
-            // auto fimT = std::chrono::steady_clock::now();
-            // // Calcula a média progressiva em milliseconds (10^-3)
-            // mT += std::chrono::duration <double, std::milli> (fimT - inicioT).count();
-            // //
-            // //----------------------------------BUSCATERNARIARECURSIVA-------------------------------------
-            // //Inicia a contagem de tempo para funcao;
-            // auto inicioTR = std::chrono::steady_clock::now();
-            // //Salva o indice
-            // indiceTR = buscaTernariaRecursiva(&vet[0], &vet[n], L+1);
-            // //Finaliza a contagem de tempo para funcao;
-            // auto fimTR = std::chrono::steady_clock::now();
-            // // Calcula a média progressiva em milliseconds (10^-3)
-            // mTR += std::chrono::duration <double, std::milli> (fimTR - inicioTR).count();
-            //
-            // //----------------------------------BUSCAFIBONACCI-------------------------------------
-            // //Inicia a contagem de tempo para funcao;
-            // auto inicioF = std::chrono::steady_clock::now();
-            // //Salva o indice
-            // indiceF = buscaFibonacci(&vet[0], &vet[n], L+1);
-            // //Finaliza a contagem de tempo para funcao;
-            // auto fimF = std::chrono::steady_clock::now();
-            // // Calcula a média progressiva em milliseconds (10^-3)
-            // mF += std::chrono::duration <double, std::milli> (fimF - inicioF).count();
+            //----------------------------------BUSCATERNARIARECURSIVA-------------------------------------
+            //Inicia a contagem de tempo para funcao;
+            auto inicioTR = std::chrono::steady_clock::now();
+            //Salva o indice
+            indiceTR = buscaTernariaRecursiva(&vet[0], &vet[n], L+1);
+            //Finaliza a contagem de tempo para funcao;
+            auto fimTR = std::chrono::steady_clock::now();
+            // Calcula a média progressiva em milliseconds (10^-3)
+            mTR += std::chrono::duration <double, std::milli> (fimTR - inicioTR).count();
+
+            //----------------------------------BUSCAFIBONACCI-------------------------------------
+            //Inicia a contagem de tempo para funcao;
+            auto inicioF = std::chrono::steady_clock::now();
+            //Salva o indice
+            indiceF = buscaFibonacci(&vet[0], &vet[n], L+1);
+            //Finaliza a contagem de tempo para funcao;
+            auto fimF = std::chrono::steady_clock::now();
+            // Calcula a média progressiva em milliseconds (10^-3)
+            mF += std::chrono::duration <double, std::milli> (fimF - inicioF).count();
         }
         std::cout.precision(4);
 
-		std::cout << n << "   " <</* (mS/100) <<  "   " << (mJS/100) << "   " << */ (mB/100) /*<< "    " << (mBR/100) << "   " << (mT/100) << "    " << (mTR/100) << "   " << (mF/100) */ << "\n";
+		std::cout << n << "   " << (mS/100) <<  "   " << (mJS/100) << "   " <<  (mB/100) << "    " << (mBR/100) << "   " << (mT/100) << "    " << (mTR/100) << "   " << (mF/100) << "\n";
         //Incremento calculado com base no intervalo das amostras
-        n += 1999980;
+        n += 1499999.5;
     }
     return 0;
 }
@@ -133,21 +134,21 @@ long int buscaSequencial( long int *first, long int *last, long int value ) {
 }
 
 long int buscaBinaria( long int *first, long int *last, long int value ) {
-    //Armazena o tamanho do array
-    long int size = last-first;
-    //Armazena a metade do array
-    long int m = size/2;
-
+    long int * n_first = first;
     while (first < last) {
+        //Armazena o tamanho do array
+        long int size = last-first;
+        //Armazena a metade do array
+        long int m = size/2;
         //Verifica se value está no meio do array
         if (value == first[m]) {
-            return m;
+            return ((first+m) - n_first);
         //Verifica se value está na primeira metade do array
         } else if (value > first[m]) {
-            first+(m+1);
+            first+=(m+1);
         //Verifica se value está na segunda metade do array
-        } else {
-            last-(m-1);
+        } else if (value < first[m]) {
+            last=(first+m);
         }
     }
     //Se value não foi encontrado no array, então retorna -1
@@ -308,7 +309,6 @@ long int buscaFibonacci( long int *first, long int *last, long int value) {
     int fibM = fibMMm2 + fibMMm1;
     //Armazena o tamanho do subvetor removido do inicio
     int offset = -1;
-
     //Armazena em fibM o número de Fibonacci menor ou igual ao tamanho do vetor
     while (fibM < n) {
         fibMMm2 = fibMMm1;
